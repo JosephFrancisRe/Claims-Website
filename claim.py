@@ -48,5 +48,5 @@ class Claim():
 
 c = Claim()
 c.subject = 'Derek Jeter'
-c.subject = 'is the greatest Yankee of all time.'
+c.text = 'is the greatest Yankee of all time.'
 c.print_claim()
