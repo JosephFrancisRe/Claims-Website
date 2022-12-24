@@ -164,8 +164,8 @@ class Claim:
         for response in self.__responses:
             response.print_response()
 
-    def provide_response(self, claim):
-        self.__responses.append(claim)
+    def add_response(self, response):
+        self.__responses.append(response)
 
     def upvote(self):
         self.__gross_upvotes += 1
@@ -178,12 +178,13 @@ class Claim:
     def update_unadjusted_net_position(self):
         self.unadjusted_net_position = self.__gross_upvotes - self.__gross_downvotes
         self.adjusted_net_position = self.unadjusted_net_position
+        self.update_unadjusted_aggregate_position()
 
     def update_unadjusted_aggregate_position(self):
         acc = 0
         for response in self.__responses:
             if response.polarity == 'support':
-                acc += response.unadjusted_aggregate_position
+                acc += response.update_unadjusted_aggregate_position()
             elif response.polarity == 'negation':
-                acc -= response.unadjusted_aggregate_position
+                acc -= response.update_unadjusted_aggregate_position()
         return self.__adjusted_net_position + acc

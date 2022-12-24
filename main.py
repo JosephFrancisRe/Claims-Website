@@ -20,19 +20,19 @@ fifth_claim = c.Claim('Derek Jeter', 'got', 'his hits by swinging softly to only
 sixth_claim = c.Claim('Derek Jeter', 'infected', 'all of Hollywood with herpes', 'Sports', 'MLB')
 
 # PROVIDING SECOND CLAIM AS RESPONSE TO INITIAL CLAIM
-initial_claim.provide_response(r.Response(second_claim, polarity = 'negation'))
+initial_claim.add_response(r.Response(claim = second_claim, polarity = 'negation', origin = initial_claim))
 
 # PROVIDING THIRD CLAIM AS RESPONSE TO SECOND CLAIM
-initial_claim.responses[0].provide_response(r.Response(third_claim, polarity = 'negation'))
+initial_claim.responses[0].add_response(r.Response(claim = third_claim, polarity = 'negation', origin = initial_claim.responses[0]))
 
 # PROVIDING FOURTH CLAIM AS RESPONSE TO INITIAL CLAIM
-initial_claim.provide_response(r.Response(fourth_claim, polarity = 'support'))
+initial_claim.add_response(r.Response(claim = fourth_claim, polarity = 'support', origin = initial_claim))
 
 # PROVIDING FIFTH CLAIM AS RESPONSE TO FOURTH CLAIM
-initial_claim.responses[1].provide_response(r.Response(fifth_claim, polarity = 'negation'))
+initial_claim.responses[1].add_response(r.Response(claim = fifth_claim, polarity = 'negation', origin = initial_claim.responses[1]))
 
 # PROVIDING SIXTH CLAIM AS RESPONSE TO FOURTH CLAIM
-initial_claim.responses[1].provide_response(r.Response(sixth_claim, polarity = 'negation'))
+initial_claim.responses[1].add_response(r.Response(claim = sixth_claim, polarity = 'negation', origin = initial_claim.responses[1]))
 
 # 'Derek Jeter is the greatest Yankee of all time' votes
 for i in range(10):
