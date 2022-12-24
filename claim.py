@@ -5,11 +5,16 @@ class Claim():
         self.__verb = verb
         self.__complement = complement
 
-        # Rating
-        self.__upvotes = 0
-        self.__downvotes = 0
-        self.__score = self.__upvotes - self.__downvotes
+        # Ratings
+        self.__gross_upvotes = 0
+        self.__gross_downvotes = 0
+        self.__unadjusted_net_position = self.__gross_upvotes - self.__gross_downvotes
+        self.__irrelevancy = 0
+        self.__irrelevancy_flag = False
+        self.__unadjusted_net_position = set_adjusted_net_position(self)
         self.__aggregate_score = 0
+
+        acc_
 
         # Qualities
         self.__category = category
@@ -104,3 +109,16 @@ class Claim():
 
     def update_score(self):
         self.__score = self.upvotes - self.downvote
+
+    def update_aggregate_score(self):
+        acc = 0
+        for score in self.__responses:
+            score
+            acc = score.score
+        self.__score = self.upvotes - self.downvote
+
+    def set_adjusted_net_position(self):
+        if self.__irrelevancy_flag:
+            return 0
+        else:
+            return self.__unadjusted_net_position
