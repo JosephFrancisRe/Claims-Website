@@ -152,11 +152,11 @@ class Claim:
     def print_claim(self):
         if self.__responses == []:
             print(
-                f"{type(self)}\nUpvotes: {self.__gross_upvotes}\nDownvotes: {self.__gross_downvotes}\nUnadjusted Net Position: {self.__unadjusted_net_position}\nUnadjusted Aggregate Position: {self.__unadjusted_aggregate_position}\nCategory: {self.__category}\nSubcategory: {self.__subcategory}\nSubject: {self.__subject}\nVerb: {self.__verb}\nComplement: {self.__complement}\nSentence: {self.__subject} {self.__verb} {self.__complement}.\nResponses: None"
+                f"{type(self)}\nUpvotes: {self.__gross_upvotes}\nDownvotes: {self.__gross_downvotes}\nUnadjusted Net Position: {self.__unadjusted_net_position}\nAdjusted Net Position: {self.__adjusted_net_position}\nUnadjusted Aggregate Position: {self.__unadjusted_aggregate_position}\nCategory: {self.__category}\nSubcategory: {self.__subcategory}\nSubject: {self.__subject}\nVerb: {self.__verb}\nComplement: {self.__complement}\nSentence: {self.__subject} {self.__verb} {self.__complement}.\nResponses: None"
             )
         else:
             print(
-                f"{type(self)}\nUpvotes: {self.__gross_upvotes}\nDownvotes: {self.__gross_downvotes}\nUnadjusted Net Position: {self.__unadjusted_net_position}\nUnadjusted Aggregate Position: {self.__unadjusted_aggregate_position}\nCategory: {self.__category}\nSubcategory: {self.__subcategory}\nSubject: {self.__subject}\nVerb: {self.__verb}\nComplement: {self.__complement}\nSentence: {self.__subject} {self.__verb} {self.__complement}.\nResponses:\n"
+                f"{type(self)}\nUpvotes: {self.__gross_upvotes}\nDownvotes: {self.__gross_downvotes}\nUnadjusted Net Position: {self.__unadjusted_net_position}\nAdjusted Net Position: {self.__adjusted_net_position}\nUnadjusted Aggregate Position: {self.__unadjusted_aggregate_position}\nCategory: {self.__category}\nSubcategory: {self.__subcategory}\nSubject: {self.__subject}\nVerb: {self.__verb}\nComplement: {self.__complement}\nSentence: {self.__subject} {self.__verb} {self.__complement}.\nResponses:\n"
             )
             self.print_responses()
 
@@ -176,9 +176,9 @@ class Claim:
         self.update_unadjusted_net_position()
 
     def update_unadjusted_net_position(self):
-        self.unadjusted_net_position = self.__gross_upvotes - self.__gross_downvotes
-        self.adjusted_net_position = self.unadjusted_net_position
-        self.update_unadjusted_aggregate_position()
+        self.__unadjusted_net_position = self.__gross_upvotes - self.__gross_downvotes
+        self.__adjusted_net_position = self.__unadjusted_net_position
+        self.__unadjusted_aggregate_position = self.update_unadjusted_aggregate_position()
 
     def update_unadjusted_aggregate_position(self):
         acc = 0

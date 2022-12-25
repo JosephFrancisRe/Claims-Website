@@ -86,9 +86,9 @@ class Response(c.Claim):
 
     def print_response(self):
         if self.__responses == []:
-            print(f'{type(self)}\nPolarity: {self.__polarity}\nIrrelevancy: {self.__irrelevancy}\nIrrelevancy Score: {self.__irrelevancy_score}\nUpvotes: {self.__gross_upvotes}\nDownvotes: {self.__gross_downvotes}\nUnadjusted Net Position: {self.__unadjusted_net_position}\nUnadjusted Aggregate Position: {self.__unadjusted_aggregate_position}\nCategory: {self.__category}\nSubcategory: {self.__subcategory}\nSubject: {self.__subject}\nVerb: {self.__verb}\nComplement: {self.__complement}\nSentence: {self.__subject} {self.__verb} {self.__complement}.\nOrigin: {self.__origin}\nResponses: None\n')
+            print(f'{type(self)}\nPolarity: {self.__polarity}\nIrrelevancy: {self.__irrelevancy}\nIrrelevancy Score: {self.__irrelevancy_score}\nUpvotes: {self.__gross_upvotes}\nDownvotes: {self.__gross_downvotes}\nUnadjusted Net Position: {self.__unadjusted_net_position}\nAdjusted Net Position: {self.__adjusted_net_position}\nUnadjusted Aggregate Position: {self.__unadjusted_aggregate_position}\nCategory: {self.__category}\nSubcategory: {self.__subcategory}\nSubject: {self.__subject}\nVerb: {self.__verb}\nComplement: {self.__complement}\nSentence: {self.__subject} {self.__verb} {self.__complement}.\nOrigin: {self.__origin}\nResponses: None\n')
         else:
-            print(f'{type(self)}\nPolarity: {self.__polarity}\nIrrelevancy: {self.__irrelevancy}\nIrrelevancy Score: {self.__irrelevancy_score}\nUpvotes: {self.__gross_upvotes}\nDownvotes: {self.__gross_downvotes}\nUnadjusted Net Position: {self.__unadjusted_net_position}\nUnadjusted Aggregate Position: {self.__unadjusted_aggregate_position}\nCategory: {self.__category}\nSubcategory: {self.__subcategory}\nSubject: {self.__subject}\nVerb: {self.__verb}\nComplement: {self.__complement}\nSentence: {self.__subject} {self.__verb} {self.__complement}.\nOrigin: {self.__origin}\nResponses:\n')
+            print(f'{type(self)}\nPolarity: {self.__polarity}\nIrrelevancy: {self.__irrelevancy}\nIrrelevancy Score: {self.__irrelevancy_score}\nUpvotes: {self.__gross_upvotes}\nDownvotes: {self.__gross_downvotes}\nUnadjusted Net Position: {self.__unadjusted_net_position}\nAdjusted Net Position: {self.__adjusted_net_position}\nUnadjusted Aggregate Position: {self.__unadjusted_aggregate_position}\nCategory: {self.__category}\nSubcategory: {self.__subcategory}\nSubject: {self.__subject}\nVerb: {self.__verb}\nComplement: {self.__complement}\nSentence: {self.__subject} {self.__verb} {self.__complement}.\nOrigin: {self.__origin}\nResponses:\n')
             for subresponse in self.__responses:
                 subresponse.print_response()
 
@@ -113,6 +113,7 @@ class Response(c.Claim):
             self.__irrelevancy = True
         else:
             self.__irrelevancy = False
+        self.update_adjusted_net_position()
 
     def remove_irrelevancy_vote(self):
         self.__irrelevancy_score -= 1
@@ -120,6 +121,7 @@ class Response(c.Claim):
             self.__irrelevancy = True
         else:
             self.__irrelevancy = False
+        self.update_adjusted_net_position()
 
     def update_adjusted_net_position(self):
         if self.__irrelevancy:
