@@ -122,10 +122,3 @@ class Response(c.Claim):
             temp = temp.origin
         temp = temp.origin
         return temp.total_weighted_aggregate_position
-
-    '''def update_max_weighted_aggregate_position_percentage(self):
-        temp = self
-        while not isinstance(temp.origin, c.Claim):
-            temp = temp.origin
-        temp = temp.origin
-        return temp.max_weighted_aggregate_position_percentage'''
