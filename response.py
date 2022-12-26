@@ -68,20 +68,13 @@ class Response(c.Claim):
             for subresponse in self.responses:
                 subresponse.print_response()
 
-    def upvote(self):
-        self.gross_upvotes += 1
-        self.update_unadjusted_net_position()
-
-    def downvote(self):
-        self.gross_downvotes += 1
-        self.update_unadjusted_net_position()
-
     def update_unadjusted_net_position(self):
+        if self.gross_downvotes == 0:
+            self.upvote_downvote_percentage = self.gross_upvotes / 1
+        else:
+            self.upvote_downvote_percentage = self.gross_upvotes / self.gross_downvotes
         self.unadjusted_net_position = self.gross_upvotes - self.gross_downvotes
         self.update_adjusted_net_position()
-
-    def add_response(self, response):
-        self.responses.append(response)
 
     def irrelevancy_vote(self):
         self.__irrelevancy_score += 1
