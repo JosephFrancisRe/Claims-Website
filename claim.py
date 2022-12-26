@@ -282,11 +282,11 @@ class Claim:
         self.update_all()
         if self.__responses == []:
             print(
-                f"{type(self)}\nUpvotes: {self.gross_upvotes}\nDownvotes: {self.gross_downvotes}\nUnadjusted Net Position: {self.unadjusted_net_position}\nAdjusted Net Position: {self.adjusted_net_position}\nUnadjusted Aggregate Position: {self.unadjusted_aggregate_position}\nUpvote/Downvote Percentage: {self.upvote_downvote_percentage}\nAdjusted Aggregate Position: {self.adjusted_aggregate_position}\nTotal Upvote/Downvote Percentage: {self.total_upvote_downvote_percentage}\nWeight of Upvote/Downvote Percentage: {self.weight_of_upvote_downvote_percentage}\nWeighted Aggregate Position: {self.weighted_aggregate_position}\nTotal Weighted Aggregate Position: {self.total_weighted_aggregate_position}\nWeighted Aggregate Position Percentage: {self.weighted_aggregate_position_percentage}\nFinal Score: {self.final_score}\nCategory: {self.category}\nSubcategory: {self.subcategory}\nSubject: {self.subject}\nVerb: {self.verb}\nComplement: {self.complement}\nSentence: {self.subject} {self.verb} {self.complement}.\nResponses: None"
+                f"{type(self)}\nUpvotes: {self.gross_upvotes}\nDownvotes: {self.gross_downvotes}\nUnadjusted Net Position: {self.unadjusted_net_position}\nAdjusted Net Position: {self.adjusted_net_position}\nUnadjusted Aggregate Position: {self.unadjusted_aggregate_position}\nUpvote/Downvote Percentage: {self.upvote_downvote_percentage}\nAdjusted Aggregate Position: {self.adjusted_aggregate_position}\nTotal Upvote/Downvote Percentage: {self.total_upvote_downvote_percentage}\nWeight of Upvote/Downvote Percentage: {self.weight_of_upvote_downvote_percentage}\nWeighted Aggregate Position: {self.weighted_aggregate_position}\nTotal Weighted Aggregate Position: {self.total_weighted_aggregate_position}\nWeighted Aggregate Position Percentage: {self.weighted_aggregate_position_percentage}\nMax Weighted Aggregate Position Percentage: {self.max_weighted_aggregate_position_percentage}\nFinal Score: {self.final_score}\nCategory: {self.category}\nSubcategory: {self.subcategory}\nSubject: {self.subject}\nVerb: {self.verb}\nComplement: {self.complement}\nSentence: {self.subject} {self.verb} {self.complement}.\nResponses: None"
             )
         else:
             print(
-                f"{type(self)}\nUpvotes: {self.gross_upvotes}\nDownvotes: {self.gross_downvotes}\nUnadjusted Net Position: {self.unadjusted_net_position}\nAdjusted Net Position: {self.adjusted_net_position}\nUnadjusted Aggregate Position: {self.unadjusted_aggregate_position}\nUpvote/Downvote Percentage: {self.upvote_downvote_percentage}\nAdjusted Aggregate Position: {self.adjusted_aggregate_position}\nTotal Upvote/Downvote Percentage: {self.total_upvote_downvote_percentage}\nWeight of Upvote/Downvote Percentage: {self.weight_of_upvote_downvote_percentage}\nWeighted Aggregate Position: {self.weighted_aggregate_position}\nTotal Weighted Aggregate Position: {self.total_weighted_aggregate_position}\nWeighted Aggregate Position Percentage: {self.weighted_aggregate_position_percentage}\nFinal Score: {self.final_score}\nCategory: {self.category}\nSubcategory: {self.subcategory}\nSubject: {self.subject}\nVerb: {self.verb}\nComplement: {self.complement}\nSentence: {self.subject} {self.verb} {self.complement}.\nResponses:\n"
+                f"{type(self)}\nUpvotes: {self.gross_upvotes}\nDownvotes: {self.gross_downvotes}\nUnadjusted Net Position: {self.unadjusted_net_position}\nAdjusted Net Position: {self.adjusted_net_position}\nUnadjusted Aggregate Position: {self.unadjusted_aggregate_position}\nUpvote/Downvote Percentage: {self.upvote_downvote_percentage}\nAdjusted Aggregate Position: {self.adjusted_aggregate_position}\nTotal Upvote/Downvote Percentage: {self.total_upvote_downvote_percentage}\nWeight of Upvote/Downvote Percentage: {self.weight_of_upvote_downvote_percentage}\nWeighted Aggregate Position: {self.weighted_aggregate_position}\nTotal Weighted Aggregate Position: {self.total_weighted_aggregate_position}\nWeighted Aggregate Position Percentage: {self.weighted_aggregate_position_percentage}\nMax Weighted Aggregate Position Percentage: {self.max_weighted_aggregate_position_percentage}\nFinal Score: {self.final_score}\nCategory: {self.category}\nSubcategory: {self.subcategory}\nSubject: {self.subject}\nVerb: {self.verb}\nComplement: {self.complement}\nSentence: {self.subject} {self.verb} {self.complement}.\nResponses:\n"
             )
             self.print_responses()
 
@@ -356,14 +356,21 @@ class Claim:
     def update_total_weighted_position(self):
         acc = 0
         for response in self.__responses:
-            acc += response.update_total_weighted_position()
-        return self.weight_of_upvote_downvote_percentage + acc
+            if response.adjusted_net_position != 0:
+                acc += response.update_total_weighted_position()
+            for subresponse in response.responses:
+                if subresponse.adjusted_net_position != 0:
+                    acc += subresponse.update_total_weighted_position()
+        return self.upvote_downvote_percentage + acc
 
     def update_max_weighted_aggregate_position_percentage(self):
         max = self.weighted_aggregate_position_percentage
         for response in self.responses:
             if response.weighted_aggregate_position_percentage > max:
                 max = response.weighted_aggregate_position_percentage
+            for subresponse in response.responses:
+                if subresponse.weighted_aggregate_position_percentage > max:
+                    max = response.weighted_aggregate_position_percentage
         self.max_weighted_aggregate_position_percentage = max
 
     def update_final_score(self):
