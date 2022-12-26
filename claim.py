@@ -299,13 +299,13 @@ class Claim:
 
     def upvote(self):
         self.gross_upvotes += 1
-        self.update_unadjusted_net_position()
+        self.update_all()
 
     def downvote(self):
         self.gross_downvotes += 1
-        self.update_unadjusted_net_position()
+        self.update_all()
 
-    def update_unadjusted_net_position(self):
+    def update_all(self):
         if self.gross_downvotes == 0:
             self.upvote_downvote_percentage = self.gross_upvotes / 1
         else:
@@ -321,8 +321,8 @@ class Claim:
         self.update_weight_of_upvote_downvote_percentage()
         self.update_weighted_aggregate_position()
         self.total_weighted_aggregate_position = self.update_total_weighted_position()
-        self.weighted_aggregate_position_percentage = self.weighted_aggregate_position / self.total_weighted_aggregate_position
-        self.update_max_weighted_aggregate_position_percentage()
+        self.weighted_aggregate_position_percentage = self.update_weighted_aggregate_position_percentage()
+        self.max_weighted_aggregate_position_percentage = self.update_max_weighted_aggregate_position_percentage()
         self.update_final_score()
 
     def update_unadjusted_aggregate_position(self):
@@ -363,23 +363,27 @@ class Claim:
                     acc += subresponse.update_total_weighted_position()
         return self.upvote_downvote_percentage + acc
 
+    def update_weighted_aggregate_position_percentage(self):
+        if self.total_weighted_aggregate_position == 0:
+            self.weighted_aggregate_position_percentage = self.weighted_aggregate_position
+        else:
+            self.weighted_aggregate_position_percentage = self.weighted_aggregate_position / self.total_weighted_aggregate_position
+        return self.weighted_aggregate_position_percentage
+
     def update_max_weighted_aggregate_position_percentage(self):
         max = self.weighted_aggregate_position_percentage
         for response in self.responses:
+            response.update_all()
             if response.weighted_aggregate_position_percentage > max:
                 max = response.weighted_aggregate_position_percentage
             for subresponse in response.responses:
+                subresponse.update_all()
                 if subresponse.weighted_aggregate_position_percentage > max:
                     max = response.weighted_aggregate_position_percentage
-        self.max_weighted_aggregate_position_percentage = max
+        return max
 
     def update_final_score(self):
         if self.max_weighted_aggregate_position_percentage == 0:
             self.final_score = round(self.weighted_aggregate_position_percentage / 1 * 100, 1)
         else:
             self.final_score = round(self.weighted_aggregate_position_percentage / self.max_weighted_aggregate_position_percentage * 100, 1)
-
-    def update_all(self):
-        self.update_unadjusted_net_position()
-        self.update_unadjusted_aggregate_position()
-        self.update_adjusted_aggregate_position()

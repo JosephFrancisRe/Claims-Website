@@ -68,7 +68,7 @@ class Response(c.Claim):
             for subresponse in self.responses:
                 subresponse.print_response()
 
-    def update_unadjusted_net_position(self):
+    def update_all(self):
         if self.gross_downvotes == 0:
             self.upvote_downvote_percentage = self.gross_upvotes / 1
         else:
@@ -82,7 +82,7 @@ class Response(c.Claim):
         self.update_weighted_aggregate_position()
         self.total_weighted_aggregate_position = self.update_total_weighted_aggregate_position()
         self.weighted_aggregate_position_percentage = self.weighted_aggregate_position / self.total_weighted_aggregate_position
-        self.update_max_weighted_aggregate_position_percentage()
+        self.max_weighted_aggregate_position_percentage = self.update_max_weighted_aggregate_position_percentage()
         self.update_final_score()
 
     def irrelevancy_vote(self):
@@ -124,8 +124,8 @@ class Response(c.Claim):
         return temp.total_weighted_aggregate_position
 
     '''def update_max_weighted_aggregate_position_percentage(self):
-        max = self.weighted_aggregate_position_percentage
-        for response in self.responses:
-            if response.weighted_aggregate_position_percentage > max:
-                max = response.weighted_aggregate_position_percentage
-        self.max_weighted_aggregate_position_percentage = max'''
+        temp = self
+        while not isinstance(temp.origin, c.Claim):
+            temp = temp.origin
+        temp = temp.origin
+        return temp.max_weighted_aggregate_position_percentage'''
