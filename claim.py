@@ -317,7 +317,7 @@ class Claim:
             self.adjusted_net_position = self.unadjusted_net_position
         self.unadjusted_aggregate_position = self.update_unadjusted_aggregate_position()
         self.update_adjusted_aggregate_position()
-        self.total_upvote_downvote_percentage = self.update_total_vote_percentage()
+        self.total_upvote_downvote_percentage = self.update_total_upvote_downvote_percentage()
         self.update_weight_of_upvote_downvote_percentage()
         self.update_weighted_aggregate_position()
         self.total_weighted_aggregate_position = self.update_total_weighted_position()
@@ -337,10 +337,14 @@ class Claim:
     def update_adjusted_aggregate_position(self):
         self.adjusted_aggregate_position = self.unadjusted_aggregate_position * self.upvote_downvote_percentage
 
-    def update_total_vote_percentage(self):
+    def update_total_upvote_downvote_percentage(self):
         acc = 0
         for response in self.__responses:
-            acc += response.update_total_vote_percentage()
+            if response.adjusted_net_position != 0:
+                acc += response.update_total_upvote_downvote_percentage()
+            for subresponse in response.responses:
+                if subresponse.adjusted_net_position != 0:
+                    acc += subresponse.update_total_upvote_downvote_percentage()
         return self.upvote_downvote_percentage + acc
 
     def update_weight_of_upvote_downvote_percentage(self):
@@ -363,7 +367,10 @@ class Claim:
         self.max_weighted_aggregate_position_percentage = max
 
     def update_final_score(self):
-        self.final_score = round(self.weighted_aggregate_position_percentage / self.max_weighted_aggregate_position_percentage * 100, 1)
+        if self.max_weighted_aggregate_position_percentage == 0:
+            self.final_score = round(self.weighted_aggregate_position_percentage / 1 * 100, 1)
+        else:
+            self.final_score = round(self.weighted_aggregate_position_percentage / self.max_weighted_aggregate_position_percentage * 100, 1)
 
     def update_all(self):
         self.update_unadjusted_net_position()
