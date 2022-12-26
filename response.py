@@ -77,7 +77,7 @@ class Response(c.Claim):
         self.update_adjusted_net_position()
         self.unadjusted_aggregate_position = self.update_unadjusted_aggregate_position()
         self.update_adjusted_aggregate_position()
-        self.total_upvote_downvote_percentage = self.update_total_upvote_downvote_percentage()
+        self.update_total_upvote_downvote_percentage()
         self.update_weight_of_upvote_downvote_percentage()
         self.update_weighted_aggregate_position()
         self.total_weighted_aggregate_position = self.update_total_weighted_position()
@@ -109,22 +109,12 @@ class Response(c.Claim):
         self.unadjusted_aggregate_position = self.update_unadjusted_aggregate_position()
 
     def update_total_upvote_downvote_percentage(self):
-        upward_acc = self.counting_total_vote_percentage_upward()
-        acc = 0
-        for response in self.responses:
-            acc += response.update_total_upvote_downvote_percentage()
-        self.total_upvote_downvote_percentage = self.upvote_downvote_percentage + acc + upward_acc
-        return self.upvote_downvote_percentage
-        
-    def counting_total_vote_percentage_upward(self):
-        acc = 0
         temp = self
         while not isinstance(temp.origin, c.Claim):
             temp = temp.origin
-            acc += temp.upvote_downvote_percentage
         temp = temp.origin
         self.total_upvote_downvote_percentage = temp.total_upvote_downvote_percentage
-        return acc
+        return self.upvote_downvote_percentage
 
     '''def update_max_weighted_aggregate_position_percentage(self):
         max = self.weighted_aggregate_position_percentage
