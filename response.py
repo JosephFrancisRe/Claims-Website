@@ -80,7 +80,7 @@ class Response(c.Claim):
         self.update_total_upvote_downvote_percentage()
         self.update_weight_of_upvote_downvote_percentage()
         self.update_weighted_aggregate_position()
-        self.total_weighted_aggregate_position = self.update_total_weighted_position()
+        self.total_weighted_aggregate_position = self.update_total_weighted_aggregate_position()
         self.weighted_aggregate_position_percentage = self.weighted_aggregate_position / self.total_weighted_aggregate_position
         self.update_max_weighted_aggregate_position_percentage()
         self.update_final_score()
@@ -115,6 +115,13 @@ class Response(c.Claim):
         temp = temp.origin
         self.total_upvote_downvote_percentage = temp.total_upvote_downvote_percentage
         return self.upvote_downvote_percentage
+
+    def update_total_weighted_aggregate_position(self):
+        temp = self
+        while not isinstance(temp.origin, c.Claim):
+            temp = temp.origin
+        temp = temp.origin
+        return temp.total_weighted_aggregate_position
 
     '''def update_max_weighted_aggregate_position_percentage(self):
         max = self.weighted_aggregate_position_percentage
