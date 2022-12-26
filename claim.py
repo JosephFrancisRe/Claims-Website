@@ -18,6 +18,13 @@ class Claim:
         self.__adjusted_net_position = self.__unadjusted_net_position
         self.__unadjusted_aggregate_position = self.update_unadjusted_aggregate_position()
         self.__adjusted_aggregate_position = 0.0
+        self.__total_upvote_downvote_percentage = 0
+        self.__weight_of_upvote_downvote_percentage = 0
+        self.__weighted_aggregate_position = 0
+        self.__total_weighted_aggregate_position = 0
+        self.__weighted_aggregate_position_percentage = 0
+        self.__max_weighted_aggregate_position_percentage = 0
+        self.__final_score = 0
 
     @property
     def subject(self):
@@ -92,6 +99,30 @@ class Claim:
         del self.__upvote_downvote_percentage
 
     @property
+    def total_upvote_downvote_percentage(self):
+        return self.__total_upvote_downvote_percentage
+
+    @total_upvote_downvote_percentage.setter
+    def total_upvote_downvote_percentage(self, param):
+        self.__total_upvote_downvote_percentage = param
+
+    @total_upvote_downvote_percentage.deleter
+    def total_upvote_downvote_percentage(self):
+        del self.__total_upvote_downvote_percentage
+
+    @property
+    def weight_of_upvote_downvote_percentage(self):
+        return self.__weight_of_upvote_downvote_percentage
+
+    @weight_of_upvote_downvote_percentage.setter
+    def weight_of_upvote_downvote_percentage(self, param):
+        self.__weight_of_upvote_downvote_percentage = param
+
+    @weight_of_upvote_downvote_percentage.deleter
+    def weight_of_upvote_downvote_percentage(self):
+        del self.__weight_of_upvote_downvote_percentage
+
+    @property
     def unadjusted_net_position(self):
         return self.__unadjusted_net_position
 
@@ -138,6 +169,66 @@ class Claim:
     @adjusted_aggregate_position.deleter
     def adjusted_aggregate_position(self):
         del self.__adjusted_aggregate_position
+
+    @property
+    def weighted_aggregate_position(self):
+        return self.__weighted_aggregate_position
+
+    @weighted_aggregate_position.setter
+    def weighted_aggregate_position(self, param):
+        self.__weighted_aggregate_position = param
+
+    @weighted_aggregate_position.deleter
+    def weighted_aggregate_position(self):
+        del self.__weighted_aggregate_position
+
+    @property
+    def total_weighted_aggregate_position(self):
+        return self.__total_weighted_aggregate_position
+
+    @total_weighted_aggregate_position.setter
+    def total_weighted_aggregate_position(self, param):
+        self.__total_weighted_aggregate_position = param
+
+    @total_weighted_aggregate_position.deleter
+    def total_weighted_aggregate_position(self):
+        del self.__total_weighted_aggregate_position
+
+    @property
+    def weighted_aggregate_position_percentage(self):
+        return self.__weighted_aggregate_position_percentage
+
+    @weighted_aggregate_position_percentage.setter
+    def weighted_aggregate_position_percentage(self, param):
+        self.__weighted_aggregate_position_percentage = param
+
+    @weighted_aggregate_position_percentage.deleter
+    def weighted_aggregate_position_percentage(self):
+        del self.__weighted_aggregate_position_percentage
+
+    @property
+    def max_weighted_aggregate_position_percentage(self):
+        return self.__max_weighted_aggregate_position_percentage
+
+    @max_weighted_aggregate_position_percentage.setter
+    def max_weighted_aggregate_position_percentage(self, param):
+        self.__max_weighted_aggregate_position_percentage = param
+
+    @max_weighted_aggregate_position_percentage.deleter
+    def max_weighted_aggregate_position_percentage(self):
+        del self.__max_weighted_aggregate_position_percentage
+
+    @property
+    def final_score(self):
+        return self.__final_score
+
+    @final_score.setter
+    def final_score(self, param):
+        self.__final_score = param
+
+    @final_score.deleter
+    def final_score(self):
+        del self.__final_score
 
     @property
     def support(self):
@@ -191,11 +282,11 @@ class Claim:
         self.update_all()
         if self.__responses == []:
             print(
-                f"{type(self)}\nUpvotes: {self.gross_upvotes}\nDownvotes: {self.gross_downvotes}\nUnadjusted Net Position: {self.unadjusted_net_position}\nAdjusted Net Position: {self.adjusted_net_position}\nUnadjusted Aggregate Position: {self.unadjusted_aggregate_position}\nUpvote/Downvote Percentage: {self.upvote_downvote_percentage}\nAdjusted Aggregate Position: {self.adjusted_aggregate_position}\nCategory: {self.category}\nSubcategory: {self.subcategory}\nSubject: {self.subject}\nVerb: {self.verb}\nComplement: {self.complement}\nSentence: {self.subject} {self.verb} {self.complement}.\nResponses: None"
+                f"{type(self)}\nUpvotes: {self.gross_upvotes}\nDownvotes: {self.gross_downvotes}\nUnadjusted Net Position: {self.unadjusted_net_position}\nAdjusted Net Position: {self.adjusted_net_position}\nUnadjusted Aggregate Position: {self.unadjusted_aggregate_position}\nUpvote/Downvote Percentage: {self.upvote_downvote_percentage}\nAdjusted Aggregate Position: {self.adjusted_aggregate_position}\nTotal Upvote/Downvote Percentage: {self.total_upvote_downvote_percentage}\nWeight of Upvote/Downvote Percentage: {self.weight_of_upvote_downvote_percentage}\nWeighted Aggregate Position: {self.weighted_aggregate_position}\nTotal Weighted Aggregate Position: {self.total_weighted_aggregate_position}\nWeighted Aggregate Position Percentage: {self.weighted_aggregate_position_percentage}\nFinal Score: {self.final_score}\nCategory: {self.category}\nSubcategory: {self.subcategory}\nSubject: {self.subject}\nVerb: {self.verb}\nComplement: {self.complement}\nSentence: {self.subject} {self.verb} {self.complement}.\nResponses: None"
             )
         else:
             print(
-                f"{type(self)}\nUpvotes: {self.gross_upvotes}\nDownvotes: {self.gross_downvotes}\nUnadjusted Net Position: {self.unadjusted_net_position}\nAdjusted Net Position: {self.adjusted_net_position}\nUnadjusted Aggregate Position: {self.unadjusted_aggregate_position}\nUpvote/Downvote Percentage: {self.upvote_downvote_percentage}\nAdjusted Aggregate Position: {self.adjusted_aggregate_position}\nCategory: {self.category}\nSubcategory: {self.subcategory}\nSubject: {self.subject}\nVerb: {self.verb}\nComplement: {self.complement}\nSentence: {self.subject} {self.verb} {self.complement}.\nResponses:\n"
+                f"{type(self)}\nUpvotes: {self.gross_upvotes}\nDownvotes: {self.gross_downvotes}\nUnadjusted Net Position: {self.unadjusted_net_position}\nAdjusted Net Position: {self.adjusted_net_position}\nUnadjusted Aggregate Position: {self.unadjusted_aggregate_position}\nUpvote/Downvote Percentage: {self.upvote_downvote_percentage}\nAdjusted Aggregate Position: {self.adjusted_aggregate_position}\nTotal Upvote/Downvote Percentage: {self.total_upvote_downvote_percentage}\nWeight of Upvote/Downvote Percentage: {self.weight_of_upvote_downvote_percentage}\nWeighted Aggregate Position: {self.weighted_aggregate_position}\nTotal Weighted Aggregate Position: {self.total_weighted_aggregate_position}\nWeighted Aggregate Position Percentage: {self.weighted_aggregate_position_percentage}\nFinal Score: {self.final_score}\nCategory: {self.category}\nSubcategory: {self.subcategory}\nSubject: {self.subject}\nVerb: {self.verb}\nComplement: {self.complement}\nSentence: {self.subject} {self.verb} {self.complement}.\nResponses:\n"
             )
             self.print_responses()
 
@@ -226,6 +317,13 @@ class Claim:
             self.adjusted_net_position = self.unadjusted_net_position
         self.unadjusted_aggregate_position = self.update_unadjusted_aggregate_position()
         self.update_adjusted_aggregate_position()
+        self.total_upvote_downvote_percentage = self.update_total_vote_percentage()
+        self.update_weight_of_upvote_downvote_percentage()
+        self.update_weighted_aggregate_position()
+        self.total_weighted_aggregate_position = self.update_total_weighted_position()
+        self.weighted_aggregate_position_percentage = self.weighted_aggregate_position / self.total_weighted_aggregate_position
+        self.update_max_weighted_aggregate_position_percentage()
+        self.update_final_score()
 
     def update_unadjusted_aggregate_position(self):
         acc = 0
@@ -238,6 +336,34 @@ class Claim:
 
     def update_adjusted_aggregate_position(self):
         self.adjusted_aggregate_position = self.unadjusted_aggregate_position * self.upvote_downvote_percentage
+
+    def update_total_vote_percentage(self):
+        acc = 0
+        for response in self.__responses:
+            acc += response.update_total_vote_percentage()
+        return self.upvote_downvote_percentage + acc
+
+    def update_weight_of_upvote_downvote_percentage(self):
+        self.weight_of_upvote_downvote_percentage = self.upvote_downvote_percentage / self.total_upvote_downvote_percentage
+
+    def update_weighted_aggregate_position(self):
+        self.weighted_aggregate_position = self.weight_of_upvote_downvote_percentage * self.adjusted_aggregate_position
+
+    def update_total_weighted_position(self):
+        acc = 0
+        for response in self.__responses:
+            acc += response.update_total_weighted_position()
+        return self.weight_of_upvote_downvote_percentage + acc
+
+    def update_max_weighted_aggregate_position_percentage(self):
+        max = self.weighted_aggregate_position_percentage
+        for response in self.responses:
+            if response.weighted_aggregate_position_percentage > max:
+                max = response.weighted_aggregate_position_percentage
+        self.max_weighted_aggregate_position_percentage = max
+
+    def update_final_score(self):
+        self.final_score = round(self.weighted_aggregate_position_percentage / self.max_weighted_aggregate_position_percentage * 100, 1)
 
     def update_all(self):
         self.update_unadjusted_net_position()
