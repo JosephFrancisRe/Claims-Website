@@ -13,9 +13,11 @@ class Claim:
         # Scores
         self.__gross_upvotes = 0
         self.__gross_downvotes = 0
+        self.__upvote_downvote_percentage = 0.0
         self.__unadjusted_net_position = self.__gross_upvotes - self.__gross_downvotes
         self.__adjusted_net_position = self.__unadjusted_net_position
         self.__unadjusted_aggregate_position = self.update_unadjusted_aggregate_position()
+        self.__adjusted_aggregate_position = 0.0
 
     @property
     def subject(self):
@@ -78,6 +80,18 @@ class Claim:
         del self.__gross_downvotes
 
     @property
+    def upvote_downvote_percentage(self):
+        return self.__upvote_downvote_percentage
+
+    @upvote_downvote_percentage.setter
+    def upvote_downvote_percentage(self, param):
+        self.__upvote_downvote_percentage = param
+
+    @upvote_downvote_percentage.deleter
+    def upvote_downvote_percentage(self):
+        del self.__upvote_downvote_percentage
+
+    @property
     def unadjusted_net_position(self):
         return self.__unadjusted_net_position
 
@@ -90,6 +104,18 @@ class Claim:
         del self.__unadjusted_net_position
 
     @property
+    def adjusted_net_position(self):
+        return self.__adjusted_net_position
+
+    @adjusted_net_position.setter
+    def adjusted_net_position(self, param):
+        self.__adjusted_net_position = param
+
+    @adjusted_net_position.deleter
+    def adjusted_net_position(self):
+        del self.__adjusted_net_position
+
+    @property
     def unadjusted_aggregate_position(self):
         return self.__unadjusted_aggregate_position
 
@@ -100,6 +126,18 @@ class Claim:
     @unadjusted_aggregate_position.deleter
     def unadjusted_aggregate_position(self):
         del self.__unadjusted_aggregate_position
+
+    @property
+    def adjusted_aggregate_position(self):
+        return self.__adjusted_aggregate_position
+
+    @adjusted_aggregate_position.setter
+    def adjusted_aggregate_position(self, param):
+        self.__adjusted_aggregate_position = param
+
+    @adjusted_aggregate_position.deleter
+    def adjusted_aggregate_position(self):
+        del self.__adjusted_aggregate_position
 
     @property
     def support(self):
@@ -150,35 +188,44 @@ class Claim:
         del self.__responses
 
     def print_claim(self):
+        self.update_all()
         if self.__responses == []:
             print(
-                f"{type(self)}\nUpvotes: {self.__gross_upvotes}\nDownvotes: {self.__gross_downvotes}\nUnadjusted Net Position: {self.__unadjusted_net_position}\nAdjusted Net Position: {self.__adjusted_net_position}\nUnadjusted Aggregate Position: {self.__unadjusted_aggregate_position}\nCategory: {self.__category}\nSubcategory: {self.__subcategory}\nSubject: {self.__subject}\nVerb: {self.__verb}\nComplement: {self.__complement}\nSentence: {self.__subject} {self.__verb} {self.__complement}.\nResponses: None"
+                f"{type(self)}\nUpvotes: {self.gross_upvotes}\nDownvotes: {self.gross_downvotes}\nUnadjusted Net Position: {self.unadjusted_net_position}\nAdjusted Net Position: {self.adjusted_net_position}\nUnadjusted Aggregate Position: {self.unadjusted_aggregate_position}\nUpvote/Downvote Percentage: {self.upvote_downvote_percentage}\nAdjusted Aggregate Position: {self.adjusted_aggregate_position}\nCategory: {self.category}\nSubcategory: {self.subcategory}\nSubject: {self.subject}\nVerb: {self.verb}\nComplement: {self.complement}\nSentence: {self.subject} {self.verb} {self.complement}.\nResponses: None"
             )
         else:
             print(
-                f"{type(self)}\nUpvotes: {self.__gross_upvotes}\nDownvotes: {self.__gross_downvotes}\nUnadjusted Net Position: {self.__unadjusted_net_position}\nAdjusted Net Position: {self.__adjusted_net_position}\nUnadjusted Aggregate Position: {self.__unadjusted_aggregate_position}\nCategory: {self.__category}\nSubcategory: {self.__subcategory}\nSubject: {self.__subject}\nVerb: {self.__verb}\nComplement: {self.__complement}\nSentence: {self.__subject} {self.__verb} {self.__complement}.\nResponses:\n"
+                f"{type(self)}\nUpvotes: {self.gross_upvotes}\nDownvotes: {self.gross_downvotes}\nUnadjusted Net Position: {self.unadjusted_net_position}\nAdjusted Net Position: {self.adjusted_net_position}\nUnadjusted Aggregate Position: {self.unadjusted_aggregate_position}\nUpvote/Downvote Percentage: {self.upvote_downvote_percentage}\nAdjusted Aggregate Position: {self.adjusted_aggregate_position}\nCategory: {self.category}\nSubcategory: {self.subcategory}\nSubject: {self.subject}\nVerb: {self.verb}\nComplement: {self.complement}\nSentence: {self.subject} {self.verb} {self.complement}.\nResponses:\n"
             )
             self.print_responses()
 
     def print_responses(self):
-        for response in self.__responses:
+        for response in self.responses:
             response.print_response()
 
     def add_response(self, response):
-        self.__responses.append(response)
+        self.responses.append(response)
 
     def upvote(self):
-        self.__gross_upvotes += 1
+        self.gross_upvotes += 1
         self.update_unadjusted_net_position()
 
     def downvote(self):
-        self.__gross_downvotes += 1
+        self.gross_downvotes += 1
         self.update_unadjusted_net_position()
 
     def update_unadjusted_net_position(self):
-        self.__unadjusted_net_position = self.__gross_upvotes - self.__gross_downvotes
-        self.__adjusted_net_position = self.__unadjusted_net_position
-        self.__unadjusted_aggregate_position = self.update_unadjusted_aggregate_position()
+        if self.gross_downvotes == 0:
+            self.upvote_downvote_percentage = self.gross_upvotes / 1
+        else:
+            self.upvote_downvote_percentage = self.gross_upvotes / self.gross_downvotes
+        self.unadjusted_net_position = self.gross_upvotes - self.gross_downvotes
+        if self.unadjusted_net_position <= 0:
+            self.adjusted_net_position = 0
+        else:
+            self.adjusted_net_position = self.unadjusted_net_position
+        self.unadjusted_aggregate_position = self.update_unadjusted_aggregate_position()
+        self.update_adjusted_aggregate_position()
 
     def update_unadjusted_aggregate_position(self):
         acc = 0
@@ -187,4 +234,12 @@ class Claim:
                 acc += response.update_unadjusted_aggregate_position()
             elif response.polarity == 'negation':
                 acc -= response.update_unadjusted_aggregate_position()
-        return self.__adjusted_net_position + acc
+        return self.adjusted_net_position + acc
+
+    def update_adjusted_aggregate_position(self):
+        self.adjusted_aggregate_position = self.unadjusted_aggregate_position * self.upvote_downvote_percentage
+
+    def update_all(self):
+        self.update_unadjusted_net_position()
+        self.update_unadjusted_aggregate_position()
+        self.update_adjusted_aggregate_position()
